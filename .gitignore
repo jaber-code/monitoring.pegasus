@@ -1,0 +1,15 @@
+/target
+/dist
+
+# secrets / local config — never commit
+/config.yaml
+/config.yml
+*.crt
+*.pem
+.env
+.env.*
+/end2end/node_modules
+/end2end/test-results
+node_modules
+*.log
+.DS_Store

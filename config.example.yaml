@@ -1,0 +1,36 @@
+# Copy to `config.yaml` (gitignored) and fill in real values.
+#
+# If `config.yaml` is absent the server runs against the in-memory mock data,
+# so the UI still works for local development without a database.
+
+database:
+  host: localhost
+  port: 5432
+  dbname: slurm_jobs
+  user: slurm
+  password: "change-me"
+
+prometheus:
+  endpoint: https://prometheus.example:8082
+  username: user
+  password: "change-me"
+  # verify=false skips TLS verification (dev only). When true, provide
+  # ca_cert_path if the endpoint uses a private CA.
+  verify: true
+  ca_cert_path: Pegasus-RootCA.crt
+  timeout_secs: 30
+
+# Per-screen defaults + cost guardrails. Each screen has its own sub-section.
+# The UI filter bar and URL query params override the per-view choices; the
+# server always clamps to the limits below.
+screens:
+  current_jobs:
+    # States shown on a fresh page load (before the user picks any).
+    default_states: [RUNNING, PENDING, COMPLETED, FAILED]
+    # Never include archived rows unless a request explicitly asks for them.
+    include_archived: false
+    # Finished jobs (COMPLETED/FAILED/CANCELLED/...) are only pulled if they
+    # ended within this many hours. Running/pending jobs ignore it.
+    finished_window_hours: 24
+    # Hard cap on rows returned to the browser.
+    max_rows: 500

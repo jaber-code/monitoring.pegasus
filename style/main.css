@@ -1,0 +1,529 @@
+/* ------------------------------------------------------------------ *
+ *  Design tokens (dark, Grafana-ish). thaw components are themed
+ *  separately via <ConfigProvider theme=Theme::dark()>; these vars
+ *  drive the app chrome and catalog only.
+ * ------------------------------------------------------------------ */
+:root {
+  --bg:            #111217;
+  --surface:       #181b1f;
+  --surface-2:     #22252b;
+  --surface-hover: #1f2329;
+  --border:        #2c3235;
+  --border-strong: #3a4149;
+
+  --text:      #d8d9da;
+  --text-weak: #9fa1a4;
+  --text-dim:  #7b7f86;
+
+  --link:   #6ea8ff;
+  --accent: #3b6fd4;
+  --star:   #f5c518;
+  --danger: #e0524a;
+
+  /* status palette (job states, utilisation bars) */
+  --ok:    #6ccf8e;
+  --warn:  #e0a13c;
+  --error: #e0524a;
+  --info:  #6ea8ff;
+  --util-gpu: #7b8cff;
+  --util-cpu: #6ccf8e;
+  --util-mem: #e0a13c;
+
+  --radius: 6px;
+  --sidebar-w: 240px;
+  --topbar-h: 48px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Layout
+ * ------------------------------------------------------------------ */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.layout__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout__main {
+  flex: 1 1 auto;
+  padding: 24px 32px;
+  overflow: auto;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Sidebar
+ * ------------------------------------------------------------------ */
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar__logo { color: var(--accent); font-size: 18px; }
+
+.sidebar__nav {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  color: var(--text-weak);
+}
+
+.sidebar__item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.sidebar__item.is-active {
+  background: var(--surface-hover);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Topbar
+ * ------------------------------------------------------------------ */
+.topbar {
+  height: var(--topbar-h);
+  flex: 0 0 var(--topbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 320px;
+  max-width: 40vw;
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-dim);
+}
+
+.topbar__search input {
+  all: unset;
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Catalog
+ * ------------------------------------------------------------------ */
+.catalog { max-width: 1100px; }
+
+.catalog__head { margin-bottom: 20px; }
+
+.catalog__title {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.catalog__subtitle {
+  margin: 0;
+  color: var(--text-weak);
+}
+
+.catalog__note {
+  padding: 20px 4px;
+  color: var(--text-weak);
+}
+
+.catalog__note--error { color: var(--danger); }
+
+/* toolbar --------------------------------------------------------- */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.toolbar__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar__search {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+
+.toolbar__search:focus {
+  outline: none;
+  border-color: var(--border-strong);
+}
+
+.toolbar__clear {
+  background: none;
+  border: none;
+  color: var(--link);
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 4px;
+}
+
+.toolbar__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* chips --------------------------------------------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-weak);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.chip--toggle {
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  padding: 3px 10px;
+}
+
+.chip--toggle:hover { color: var(--text); }
+
+.chip--toggle.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* folders ------------------------------------------------------- */
+.folder-list {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.folder { border-bottom: 1px solid var(--border); }
+
+.folder__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 6px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.folder__header:hover { background: var(--surface); }
+
+.folder__chevron {
+  display: inline-flex;
+  color: var(--text-dim);
+  transition: transform 0.15s ease;
+}
+
+.folder__header.is-open .folder__chevron { transform: rotate(90deg); }
+
+.folder__name { font-weight: 500; }
+
+.folder__count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.folder__body { display: flex; flex-direction: column; }
+.folder__body.is-hidden { display: none; }
+
+/* dashboard rows ---------------------------------------------- */
+.dashboard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px 8px 34px;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+}
+
+.dashboard-row:first-child { border-top: none; }
+
+.dashboard-row:hover {
+  background: var(--surface);
+  text-decoration: none;
+}
+
+.dashboard-row__icon { color: var(--text-dim); display: inline-flex; }
+
+.dashboard-row__tags { display: flex; gap: 6px; }
+
+.dashboard-row__spacer { flex: 1; }
+
+.dashboard-row__star { color: var(--surface-2); display: inline-flex; }
+.dashboard-row__star.is-on { color: var(--star); }
+
+/* ------------------------------------------------------------------ *
+ *  Current Jobs — filter bar
+ * ------------------------------------------------------------------ */
+.jobfilter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.jobfilter__states {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.jobfilter__fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.jf__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jf__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.jf__input {
+  min-width: 150px;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font: inherit;
+}
+.jf__input:focus { outline: none; border-color: var(--border-strong); }
+
+select.jf__input { min-width: 110px; }
+
+.jf__reset {
+  align-self: flex-end;
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--link);
+  font: inherit;
+  cursor: pointer;
+}
+.jf__reset:hover { background: var(--surface); }
+
+/* ------------------------------------------------------------------ *
+ *  Current Jobs — table
+ * ------------------------------------------------------------------ */
+.jobs-table__wrap { overflow-x: auto; }
+
+.jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.jobs-table th,
+.jobs-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.jobs-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  color: var(--text-weak);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.jobs-table tbody tr:hover { background: var(--surface); }
+
+.jobs-table__sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.jobs-table__sortable:hover { color: var(--text); }
+
+.jobs-table__sortable.is-sorted { color: var(--text); }
+
+.jobs-table__sort-arrow {
+  display: inline-block;
+  width: 10px;
+  margin-left: 2px;
+  font-size: 9px;
+  color: var(--link);
+}
+
+.jobs-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.jobs-table__id { font-variant-numeric: tabular-nums; }
+
+.jobs-table__name,
+.jobs-table__partition {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jobs-table__reason {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-weak);
+}
+
+.jobs-table__util { width: 132px; }
+
+.jobs-table__note {
+  margin: 10px 2px 0;
+  color: var(--text-weak);
+  font-size: 12px;
+}
+
+.muted { color: var(--text-dim); }
+
+/* state pill ---------------------------------------------------- */
+.state {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1.7;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+}
+.state--running { color: var(--info);  border-color: color-mix(in srgb, var(--info) 45%, transparent); }
+.state--pending { color: var(--text-weak); border-color: var(--border-strong); }
+.state--ok      { color: var(--ok);    border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+.state--error   { color: var(--error); border-color: color-mix(in srgb, var(--error) 45%, transparent); }
+.state--warn    { color: var(--warn);  border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.state--muted   { color: var(--text-dim); border-color: var(--border); }
+
+/* utilisation meter ------------------------------------------- */
+.util {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.util__track {
+  flex: 1;
+  height: 6px;
+  min-width: 60px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.util__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--text-dim);
+}
+
+.util--gpu .util__fill { background: var(--util-gpu); }
+.util--cpu .util__fill { background: var(--util-cpu); }
+.util--mem .util__fill { background: var(--util-mem); }
+
+.util__label {
+  font-size: 11px;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+  width: 34px;
+  text-align: right;
+}
+
+.util--empty { color: var(--text-dim); }
